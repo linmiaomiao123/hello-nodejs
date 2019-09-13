@@ -8,9 +8,15 @@ var http = require('http');
 //   response.end('hello from out plication');
 // })
 
+//web服务器响应json
 var onRequest = function(request, response) {
-  response.writeHead(200, {'Content-Type': 'text/plain'});
-  response.end('Hello from out plication');
+  response.writeHead(200, {'Content-Type': 'text/json'});
+  var myObj = {
+    name: 'hfpp2012',
+    job: 'programmer',
+    age: 27
+  }
+  response.end(JSON.stringify(myObj));
 } 
 var server = http.createServer(onRequest);
 
