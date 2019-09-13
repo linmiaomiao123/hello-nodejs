@@ -1,58 +1,39 @@
 //web服务器
 var http = require('http');
 var fs = require('fs');
-//创建一个服务器赋值给server变量
-// var server = http.createServer(function(request, response) {
-//   console.log('Request received');
-//   response.writeHead(200, {'Content-Type': 'text/plain'});//传了个文本给浏览器
-//   // response.write('hello from out pplication');
-//   response.end('hello from out plication');
-// })
 
-//纯文本
-// var onRequest = function(request, response) {
-//   response.writeHead(200, {'Content-Type': 'text/plain'});
-//   response.end('Hello word');
-// } 
-
-//web服务器响应json
-// var onRequest = function(request, response) {
-//   response.writeHead(200, {'Content-Type': 'application/json'});
-//   var myObj = {
-//     name: 'hfpp2012',
-//     job: 'programmer',
-//     age: 27
-//   }
-//   response.end(JSON.stringify(myObj));
-// } 
-
-//web服务器响应html
-var onRequest = function(request, response) {
-  response.writeHead(200, {'Content-Type': 'text/html'});
-  // var htmlFile = '<!DOCTYPE html>' +
-  // '<html lang="en">' +
+function startServer() {
+  var onRequest = function(request, response) {
+    console.log('Request received' + request.url)
+    // route(request.url);
+    if (request.url === '/' || request.url === '/home') {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      fs.createReadStream(__dirname + '/index.html', 'utf8').pipe(response);
+    } else if(request.url === '/review') {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      fs.createReadStream(__dirname + '/review.html', 'utf8').pipe(response)
+    } else if (request.url === '/api/v1/records') {
+      response.writeHead(200, {'Content-Type': 'application/json'});
+      var jsonObj = {
+        name: 'hfpp2012'
+      }
+      response.end(JSON.stringify(jsonObj))
+    } else {
+      response.writeHead(404, {'Content-Type': 'text/html'});
+      fs.createReadStream(__dirname + '/404.html', 'utf8').pipe(response);
+    }
+    // response.writeHead(200, {'Content-Type': 'text/html'});
+    // //使用流来读取文件， 写文件
+    // var myReadStream = fs.createReadStream(__dirname + '/index.html', 'utf8');
+    // myReadStream.pipe(response);
+  }
   
-  // '<head>' +
-  //     '<meta charset="UTF-8">' +
-  //     '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
-  //     '<meta http-equiv="X-UA-Compatible" content="ie=edge">' +
-  //     '<title>Document</title>' +
-  // '</head>' +
+  var server = http.createServer(onRequest);
   
-  // '<body>' +
+  //监听端口
+  server.listen(3000, '127.0.0.1');
+  console.log('Server started on localhost port 3000')
   
-  // '</body>' +
-  
-  // '</html>'
-  // response.end(htmlFile);
-  
-  //使用流来读取文件， 写文件
-  var myReadStream = fs.createReadStream(__dirname + '/index.html', 'utf8');
-  myReadStream.pipe(response);
 }
 
-var server = http.createServer(onRequest);
-
-//监听端口
-server.listen(3000, '127.0.0.1');
-console.log('Server started on localhost port 3000')
+exports.startServer = startServer;
