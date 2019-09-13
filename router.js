@@ -1,8 +1,9 @@
 var fs = require('fs');
-function route(handle, pathname, response) {
+
+function route(handle, pathname, response, params) {
     console.log('Routing a request for' + pathname);
     if (typeof handle[pathname] === 'function') {
-        handle[pathname](response);
+        handle[pathname](response, params);
     } else {
         console.log('No handler for' + pathname);
         response.writeHead(404, { 'Content-Type': 'text/html' });

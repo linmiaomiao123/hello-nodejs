@@ -10,13 +10,13 @@ function review(response) {
     response.writeHead(200, { 'Content-Type': 'text/html' });
     fs.createReadStream(__dirname + '/review.html', 'utf8').pipe(response);
 }
-function api_records(response) {
+function api_records(response, params) {
     console.log('Executing "api_records" handler');
-     response.writeHead(200, { 'Content-Type': 'application/json' });
-    var jsonObj = {
-        name: "hfpp2012"
-    };
-    response.end(JSON.stringify(jsonObj));
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+    // var jsonObj = {
+    //     name: "hfpp2012"
+    // };
+    response.end(JSON.stringify(params));
 }
 
 module.exports = {
